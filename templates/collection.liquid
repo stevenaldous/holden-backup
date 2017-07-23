@@ -1,0 +1,103 @@
+{% include 'spurit_po-collection-list-snippet', pageProducts: collection.products %}
+<!-- /templates/collection.liquid -->
+{% include 'grid-logic' %}
+{% paginate collection.products by 12 %}
+{% comment %}
+If there is a collection image, the split header is used.
+Else, the plain, centered text header is used.
+{% endcomment %}
+<!-- Collection Header -->
+{% if collection.image %}
+
+  <div class = "split-collection">
+    <header class="collection-header grid">
+      <div class = "grid__item large--one-half medium-down--text-center medium-down--one-whole split-collection-parent">
+        <div class = "split-collection-text">
+          <h1 class="section-header__title collection-title">{{ collection.title }}</h1>
+          <div class = "spacer-line"></div>
+          <div class="rte rte--header collection-description">{{ collection.description }}</div>
+        </div>
+      </div>
+      <div class = "grid__item large--one-half medium-down--one-whole split-collection-image lazyload" style = "background: url({{ collection.image.src | img_url: 'master' }}) no-repeat center center; background-size: cover;" data-bg="{{ collection.image.src | img_url: 'master' }}">
+      </div>
+    </header>
+  </div>
+
+{% else %}
+
+  {% if collection.description != blank %}
+    <header class="collection-header wrapper grid-uniform">
+      <div class="grid__item large--one-whole text-center">
+        <span class="vertical-spacer"></span>
+        <h1 class="section-header__title collection-title">{{ collection.title }}</h1>
+        <div class="rte rte--header collection-description">
+          {{ collection.description }}
+        </div>
+        <span class="vertical-spacer"></span>
+      </div>
+    </header>
+  {% else %}
+    <header class="collection-header wrapper">
+      <div class="large--one-whole text-center">
+        <span class="vertical-spacer"></span>
+        {% if collection.handle == 'all' %}
+          <h1 class="section-header__title collection-title">{{ 'products.general.catalog' | t }}</h1>
+        {% else %}
+          <h1 class="section-header__title collection-title">{{ collection.title }}</h1>
+        {% endif %}
+        <span class="vertical-spacer"></span>
+      </div>
+    </header>
+  {% endif %}
+
+{% endif %}
+
+<!-- Collection Sorting -->
+{% if collection.products.size != 0 %}
+
+  <div class = "wrapper">
+    <div class="text-center" id = "collection-sorting">
+      <div class="section-header__left sortby">
+        {% include 'collection-sorting' %}
+      </div>
+      <div class="browse-by">
+        {% include 'product-tag' %}
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+
+  {% assign collection_count = collection.all_products_count %}
+  <div class = "grid--full wrapper">
+    <div class = "grid__item">
+      <div class = "grid--full">
+        {% if collection_count > 0 %}
+          {% for product in collection.products %}
+          {%- comment %}<locksmith:5814>{% endcomment -%}
+            {% include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: product %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif %}
+          {%- comment %}</locksmith:5814>{% endcomment -%}
+          {% include 'wh_visible_helper' with product %}
+          {% if wh_visible == true %}
+            {% include 'product-grid-item', collection_count: ‘collection.all_products_count’ %}
+          {% endif %}
+          {% endfor %}
+          {% elsif collection.handle == 'all' and collection_count == 0 %}
+          {{ 'theme-onboarding.css' | global_asset_url | stylesheet_tag }}
+          {% include 'onboarding-empty-collection' %}
+          {% elsif collection.handle != 'all' and collection_count == 0 %}
+          <div class="grid__item text-center">
+            <h2 class="text-center">{{ 'collections.general.no_matches' | t }}</h2>
+            <a href="/" class="btn" >{{ 'general.404.button_text' | t }}</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+  {% if paginate.pages > 1 %}
+    <div class="pagination">
+      {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
+    </div>
+  {% endif %}
+{% endpaginate %}

@@ -1,0 +1,51 @@
+<!-- /snippets/product-features.liquid -->
+
+<!-- Product Feature 1 -->
+<div class = "product-features-section" id="product-features">
+<div class = "product-features-wrapper ">
+  {% if settings.enable_feature_1_image_2 or settings.feature_1_text != blank %}
+  <div class="grid--full feature-1-wrapper {% if settings.enable_product_feature_overlap == false%}no-overlap{% else %}overlay{%endif%}">
+    <div class="feature-1-images">
+      <div class = "feature-1-image-1" id = "ProductFeatures">
+        <img class = "lazyload feature-1-image-1-img" data-src="{{ 'feature-1-image-1.jpg' | asset_url }}" src="{{ 'feature-1-image-1.jpg' | asset_url }}">
+      </div>
+      {% if settings.enable_feature_1_image_2 %}
+        <div class="feature-1-image-2 {% if settings.enable_feature_2_image_2 and settings.enable_feature_2 %} mobile-image-2-left {% endif %}">
+          <img class = "lazyload feature-1-image-2-img" data-src = "{{ 'feature-1-image-2.jpg' | asset_url }}" src="{{ 'feature-1-image-2.jpg' | asset_url }}">
+        </div>
+      {% endif %}
+    </div>
+      {% if settings.feature_1_text != blank %}
+        <div class="feature-1-text send-left wow fadeInRightBig">
+          <h2 class = "product-feature-header">{{ settings.feature_1_heading }}</h2>
+          <div class="spacer-line"></div>
+          <p class = "product-feature-description">{{ settings.feature_1_text | newline_to_br }}</p>
+        </div>
+      {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Product Feature 2 -->
+  {% if settings.enable_feature_2 %}
+  <div class="grid--full feature-2-wrapper">
+    <div class = "feature-2-images">
+      <div class="feature-2-image-1-wrapper">
+        <img class = "feature-2-image-1 lazyload" data-src="{{ 'feature-2-image-1.jpg' | asset_url }}" src="{{ 'feature-2-image-1.jpg' | asset_url }}">
+      </div>
+      {% if settings.enable_feature_2_image_2 %}
+      <div class="grid__item medium--one-whole feature-2-image-2 {% if settings.enable_feature_1_image_2 %} mobile-image-2-right {% endif %}">
+        <img class = "lazyload feature-2-image-2-img" data-src="{{ 'feature-2-image-2.jpg' | asset_url }}" src="{{ 'feature-2-image-2.jpg' | asset_url }}">
+      </div>
+      {% endif %}
+    </div>
+      {% if settings.feature_2_text != blank %}
+      <div class="feature-2-text send-right wow fadeInLeftBig">
+        <h2 class="product-feature-header">{{ settings.feature_2_heading }}</h2>
+        <div class="spacer-line left"></div>
+        <p class = "product-feature-description left">{{ settings.feature_2_text | newline_to_br }}</p>
+      </div>
+      {% endif %}
+  </div>
+  {% endif %}
+</div>
+</div>

@@ -1,0 +1,92 @@
+<script>
+
+window.isTouchDevice = 'ontouchstart' in document.documentElement;
+
+//YouTube API requires in-line script
+var url = "{{ settings.hero_video_link }}";
+if (!window.isTouchDevice){
+  if (url.indexOf("youtube") != -1 || url.indexOf("youtu.be") != -1 ){
+    var videoSubstring;
+    if (url.indexOf("=") != -1){
+      videoSubstring = url.substring(url.lastIndexOf('=') + 1);
+    } else {
+      videoSubstring = url.substring(url.lastIndexOf('/') + 1);
+    }
+    var parameters = "?rel=0&autoplay=1&modestbranding=1&controls=0&loop=1&playlist="+videoSubstring+"&showinfo=0&disablekb=1&iv_load_policy=3&hd=1&wmode=transparent&enablejsapi=1&";
+    var id = videoSubstring+parameters;
+    
+    var tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var videoWidth = $('#video').width();
+    var videoHeight = videoWidth*(9/16); // 16/9 is the most common video ratio
+    var player;
+
+
+  function onYouTubeIframeAPIReady() {
+      player = new YT.Player('iframe-wrapper', {
+          height: videoHeight,
+          width: videoWidth, 
+          playerVars: {
+            'autoplay': 1,
+            'controls': 0,
+            'autohide': 1,
+            'wmode': 'opaque',
+            'showinfo': 0,
+            'loop': 1,
+            'mute': 1,
+            'origin':document.domain,
+            'playlist':id
+          },
+          'videoId': id,
+          events: {
+              'onReady': onPlayerReady,
+              'onStateChange': onPlayerStateChange
+          }
+      });
+  }
+
+
+  function onPlayerReady(event) {
+    event.target.mute();
+    player.setVolume(0);
+    player.playVideo();
+  }
+
+  function onPlayerStateChange(event) {    
+    event.target.mute();
+    player.setVolume(0);
+    $('.video').css('background-image','none');
+    $('#iframe-wrapper').css('display','block');
+  }
+
+  function positionHeroVideo(){
+    var ratio = {{settings.hero_video_ratio}};
+    var percent = 1/ratio;
+    var videoWidth = $('#video').width();
+    var initialHeight = videoWidth*(9/16);
+    
+    //set iframe dimensions
+    $('#iframe-wrapper').attr({"width":videoWidth,"height":initialHeight});
+    //set wrapper height
+    var videoHeight = videoWidth*percent - 10; //10px for good measure
+    $('#video').css({"height":videoHeight});
+    //set margin-top for vertical align middle
+    var heightOffset = (initialHeight - videoHeight)/2;
+    $('#iframe-wrapper').css('margin-top',-heightOffset);
+    //show it once it's calculated
+    $('#video').css('opacity','1');
+  }
+
+  positionHeroVideo();
+  $(window).on("resize",function(e){
+    positionHeroVideo();
+  });
+
+  }
+}
+
+</script>

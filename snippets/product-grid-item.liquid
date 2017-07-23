@@ -1,0 +1,65 @@
+<!-- /snippets/product-grid-item.liquid -->
+
+{% include 'grid-logic' %}
+
+{% assign tag = false %}
+{% if product.available %}
+  {% assign sold_out = false %}
+{% else %}
+  {% assign sold_out = true %}
+  {% assign tag = true %}
+{% endif %}
+
+{% if product.compare_at_price_min > product.price_min %}
+  {% if sold_out %}
+    {% assign on_sale = false %}
+  {% else %}
+    {% assign on_sale = true %}
+    {% assign tag = true %}
+  {% endif %}  
+{% else %}
+  {% assign on_sale = false %}
+{% endif %}
+
+
+<div class="grid__item {{ grid_item_width }} {% if tag == true %} has-tag {% endif %} product-item-parent">
+{% include 'wh_calculate_discount' with product %}
+
+  <!-- Image -->
+  <a href="{{ product.url | within: collection }}" class="grid__image">
+
+  <!-- Tags -->
+  {% if on_sale and wh_discount_value == 1 and set_price == null %}
+    <div class="tag"><span>{{ 'products.product.on_sale_html' | t }}</span></div>
+  {% endif %}
+  {% if sold_out %}
+    <div class="tag"><span>{{ 'products.product.sold_out_html' | t }}</span></div>
+  {% endif %}
+  
+    <div class = "table">
+      <div class = "cell wow fadeInUpBig">
+        <img class = "product-image lazyload" data-src="{{ product.featured_image.src | img_url: 'medium' }}" src="{{ product.featured_image.src | img_url: 'medium' }}" alt="{{ product.featured_image.alt | escape }}">
+      </div>
+    </div>
+  </a>
+
+  <!-- Title -->
+  <h4 class = "wow fadeInUpBig"><a href="{{ product.url | within: collection }}">{{ product.title | truncate: 25 }}</a></h4>
+  <a href="{{ product.url | within: collection }}">
+    <!-- Price -->
+    <p class="price wow fadeInUpBig">
+     {% if on_sale == true and product.price_varies == true %}
+        {{wh_price_min | money }} - {{ wh_price_max | money }}
+        <span class = "reduced-price"><s>{{ wh_compare_at_price | money }}</s></span>
+      {% elsif on_sale == true and product.price_varies == false %}
+      <s>{{ wh_compare_at_price | money }}</s> {{ wh_price | money }}
+      {% elsif product.price_varies %}
+        {{wh_price_min | money }} - {{ wh_price_max | money }}
+      {% else %}
+        {{ wh_price | money }}
+      {% endif %}
+    </p>
+  </a>
+
+  <a class="btn wow fadeInUpBig" href="{{ product.url | within: collection }}">{{ 'products.product.view_item' | t }}</a>
+</div>

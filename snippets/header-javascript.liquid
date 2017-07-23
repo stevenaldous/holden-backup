@@ -1,0 +1,94 @@
+{% include 'oldIE-js' %}
+{{ '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js' | script_tag }}
+<script src="{{ 'lazysizes.min.js' | asset_url }}" async=""></script>
+{{ 'header-js.js' | asset_url | script_tag }}
+<script>
+//Inline JS to reduce file load time
+$(document).ready(function() {
+    if ($('body').hasClass('template-product') && window.product){
+      PaloAlto.initProductVariants(window.product);
+    }
+ });
+
+PaloAlto.initProductVariants = function(product){
+  var selectorClass = 'productSelect';
+  if($('#' + selectorClass).length > 0){
+if (window.wh_customer_tags){
+ function wh_product_hash(product) {
+  var wh_discount_js = window.wh_discount_value;
+  var variant_price,wh_compare_js_price;
+
+  jQuery.each(product.variants, function(i, variant){
+    wh_compare_js_price = variant.compare_at_price
+    if ((wh_compare_js_price == null) || (wh_compare_js_price == 0)) {
+      wh_compare_js_price = variant.price;
+    }
+
+    v_price = wh_compare_js_price * wh_discount_js;
+    if (v_price > variant.price){v_price = variant.price}
+    if (window.wh_metafields[variant.id]){
+      variant.price = window.wh_metafields[variant.id];
+    } else {
+      variant.price = v_price;
+    }
+
+    if ((wh_compare_js_price > variant.price) || (window.wh_metafields[variant.id] && wh_discount_js == 1)) {
+      variant.compare_at_price = wh_compare_js_price
+    }
+
+  });
+  product.price = product.variants[0].price
+  product.compare_at_price = product.variants[0].compare_at_price
+  product.compare_at_price_min = product.variants[0].compare_at_price_min
+  product.compare_at_price_max = product.variants[0].compare_at_price_max
+  return product
+}
+
+new Shopify.OptionSelectors(selectorClass, {
+      product: wh_product_hash(product),
+      enableHistoryState: true,
+      onVariantSelected: PaloAlto.onVariantSelected
+    });
+
+} else {
+
+new Shopify.OptionSelectors(selectorClass, {
+      product: product,
+      enableHistoryState: true,
+      onVariantSelected: PaloAlto.onVariantSelected
+    });
+
+}    
+    
+    // adds label when there is just one variant
+    if(product.add_label){
+      $('<label>' + product.label + '</label>').insertBefore('.selector-wrapper').addClass('wow fadeInUpBig');
+    }
+  }
+  $('.product-form').css('visibility','visible');
+};
+
+PaloAlto.onVariantSelected = function (variant, selector) {
+  timber.productPage({
+    money_format: window.product.money_format,
+    variant: variant,
+    selector: selector
+  });
+  
+  //Toggle tags on featured product
+  if ($('body').hasClass('template-index') && window.product){
+    $('.tag-fp').css('opacity','0');
+    var variantID = variant.id;
+    $('#tag-'+variantID).css('opacity','1');
+    $( ".alt-image" ).click(function() {
+      $('.tag-fp').css('opacity','0');
+    });
+  } else {
+    return;
+  }
+};
+</script>
+{% if template contains 'customers' %}
+  {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+{% endif %}

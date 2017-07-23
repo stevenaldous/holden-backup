@@ -1,0 +1,52 @@
+<!-- /snippets/newsletter.liquid -->
+
+<!-- Newsletter -->
+<div class = "newsletter-section" id = "newsletter">
+  <div class="newsletter wow fadeInUpBig">
+  	<h2>{{ 'general.newsletter_form.heading' | t }}</h2>
+
+  	{% if settings.newsletter_form_action_url != blank %}
+  	{% assign form_action = settings.newsletter_form_action_url %}
+  	{% else %}
+  	{% assign form_action = '#' %}
+  	{% endif %}
+
+  	{% if settings.newsletter_form_action_url != blank %}
+
+  	<form action="{{ form_action }}" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" class="input-group">
+  		<input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.email' | t }}" name="EMAIL" id="mail" class="input-group-field" aria-label="{{ 'general.newsletter_form.email' | t }}" autocorrect="off" autocapitalize="off">
+  		<span class="input-group-btn">
+  			<button type="submit" name="subscribe" id="subscribe" value="">
+  				<i class = "custom-icon-long-arrow"></i>
+  			</button>
+  		</span>
+  	</form>
+
+  	{% else %}
+
+  	{% form 'contact' %}
+        {{ form.errors | default_errors }}
+        {% if form.posted_successfully? %}
+          <div class="newsletter--form">
+            <div class="note form-success">{{ 'general.newsletter_form.newsletter_success' | t }}</div>
+          </div>
+        {% else %}
+          <input type="hidden" value="contact" name="form_type">
+
+          <div class="newsletter--form">
+            <div class="input-group">
+
+                <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.email' | t }}" name="contact[email]" id="mail" class="input-group-field" aria-label="{{ 'general.newsletter_form.email' | t }}" autocorrect="off" autocapitalize="off">
+
+                <span class="input-group-btn">
+                  <button type="submit" name="subscribe" id="subscribe" value="">
+                    <i class = "custom-icon-long-arrow"></i>
+                  </button>
+                </span>                    
+            </div>
+          </div>
+        {% endif %}
+      {% endform %}
+  	{% endif %}
+  </div>
+</div>

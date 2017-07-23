@@ -1,0 +1,101 @@
+{%- comment %}
+  Hey there! This snippet is managed by Locksmith (uselocksmith.com). You can
+  fiddle with what's below, but your changes will be reset the next time that
+  Locksmith interacts with your shop.
+
+  Last updated: Tue, 04 Jul 2017 03:58:11 +0000
+  Integration version: v4.21
+{% endcomment -%}
+
+{%assign _9=true%}{%assign _t=false%}{%assign _l='email'%}{%assign _h='password'%}{%assign _5="errors"%}{%assign _p=customer%}{%assign _d=shop%}{%capture locksmith_customer_register_form%}{%if _d.customer_accounts_enabled%}<script src="//cdn.shopify.com/s/assets/themes_support/shopify_common-560aead139dc90d812ab2864e525084f7410876b146af25d903c665092c98dc0.js" type="text/javascript" data-via-locksmith="true"></script><script src="//cdn.shopify.com/s/assets/themes_support/customer_area-9c8d9688a815ed8c8e93bbdd8c6c89ed98f008ea2cac0324587ea3cccf4ce98c.js" type="text/javascript" data-via-locksmith="true"></script>
+
+      <!-- /templates/customers/register.liquid -->
+<div class="grid--full extra-header-padding wrapper">
+  <div class="grid__item large--one-third push--large--one-third">
+    <h2 class="text-left">{{'customer.register.title'|t}}</h2>
+    <div class="form-vertical">{%form 'create_customer'%}{{form.errors|default_errors}}
+        <label for="FirstName" class="hidden-label">{{'customer.register.first_name'|t}}</label>
+        <input type="text" name="customer[first_name]" id="FirstName" class="input-full" placeholder="{{'customer.register.first_name'|t}}" {%if form.first_name%}value="{{form.first_name}}"{%endif%} autocapitalize="words" autofocus>
+        <label for="LastName" class="hidden-label">{{'customer.register.last_name'|t}}</label>
+        <input type="text" name="customer[last_name]" id="LastName" class="input-full" placeholder="{{'customer.register.last_name'|t}}" {%if form.last_name%}value="{{form.last_name}}"{%endif%} autocapitalize="words">
+        <label for="Email" class="hidden-label">{{'customer.register.email'|t}}</label>
+        <input type="email" name="customer[email]" id="Email" class="input-full{%if form[_5] contains _l%} error{%endif%}" placeholder="{{'customer.register.email'|t}}" {%if form.email%} value="{{form.email}}"{%endif%} autocorrect="off" autocapitalize="off">
+        <label for="CreatePassword" class="hidden-label">{{'customer.register.password'|t}}</label>
+        <input type="password" name="customer[password]" id="CreatePassword" class="input-full{%if form[_5] contains _h%} error{%endif%}" placeholder="{{'customer.register.password'|t}}">
+        
+        <input type="submit" value="{{'customer.register.submit'|t}}" class="btn">
+        <a class = "return light-gray" href="{{_d.url}}">{{'customer.register.cancel'|t}}</a>
+      <input type="hidden" id="register_return_to" name="return_to" value="" />{%endform%}</div>
+  </div>
+</div>
+      <script type="text/javascript">
+        document.body.className = "template-customers-register no-outlines";
+        document.body.id = "create-account";
+        window.document.title = "Create Account – Holden Outerwear";
+
+        var returnTo = window.location.protocol + '//' + window.location.host + ('{{locksmith_path}}' || window.location.pathname) + window.location.search;
+
+        if (document.getElementsByName) {
+          var nodes = document.getElementsByName('return_to');
+          for (var i = 0; i < nodes.length; i++) {
+            nodes[i].value = '{{locksmith_path}}' || window.location.pathname;
+          }
+        } else {
+          document.getElementById('register_return_to').value = returnTo;
+        }
+      </script>{%endif%}{%endcapture%}{%capture locksmith_customer_login_form%}{%if _d.customer_accounts_enabled%}<script src="//cdn.shopify.com/s/assets/themes_support/shopify_common-560aead139dc90d812ab2864e525084f7410876b146af25d903c665092c98dc0.js" type="text/javascript" data-via-locksmith="true"></script><script src="//cdn.shopify.com/s/assets/themes_support/customer_area-9c8d9688a815ed8c8e93bbdd8c6c89ed98f008ea2cac0324587ea3cccf4ce98c.js" type="text/javascript" data-via-locksmith="true"></script>
+
+      <!-- /templates/customers/login.liquid -->
+<div class="grid--full extra-header-padding wrapper">
+  <div class="grid__item large--one-third push--large--one-third">{%comment%}
+    If a user has successfully requested a new password, the form.posted_successfully? variable
+    is set to true within the 'recover_customer_password' form only. Within that form you'll see
+    the variable 'resetPassword' set to true, which is used to initialize timber.resetPasswordSuccess().
+{%endcomment%}<div class="note form-success" id="ResetSuccess" style="display:none;">
+{{'customer.recover_password.success'|t}}
+  </div>
+  <div id="CustomerLoginForm" class="form-vertical">{%form 'customer_login'%}<h2 class="text-left">{{'customer.login.title'|t}}</h2>
+{{form.errors|default_errors}}
+      <label for="CustomerEmail" class="hidden-label">{{'customer.login.email'|t}}</label>
+      <input type="email" name="customer[email]" id="CustomerEmail" class="input-full{%if form[_5] contains _l%} error{%endif%}" placeholder="{{'customer.login.email'|t}}" autocorrect="off" autocapitalize="off" autofocus>{%if form.password_needed%}<label for="CustomerPassword" class="hidden-label">{{'customer.login.password'|t}}</label>
+        <input type="password" value="" name="customer[password]" id="CustomerPassword" class="input-full{%if form[_5] contains _h%} error{%endif%}" placeholder="{{'customer.login.password'|t}}">{%endif%}<input type="submit" class="btn" value="{{'customer.login.sign_in'|t}}">
+      <div class = "return light-gray">{%if form.password_needed%}<a href="#recover" id="RecoverPassword">{{'customer.login.forgot_password'|t}}  •  </a>{%endif%}<a href="/account/register">{{'layout.customer.create_account'|t}}</a>
+      </div>
+    <input type="hidden" id="login_checkout_url" name="checkout_url" value="" />{%endform%}</div>{%comment%}
+  JS shows/hides this form in timber.loginForms()
+{%endcomment%}<div id="RecoverPasswordForm" class = "text-left" style="display: none;">
+  <h1 class = "accounts-header">{{'customer.recover_password.title'|t}}</h1>
+  <p class = "light-gray">{{'customer.recover_password.subtext'|t}}</p>
+  <div class="form-vertical">{%form 'recover_customer_password'%}{{form.errors|default_errors}}{%comment%}
+      Assign variable to be used after timber.init() is run in theme.liquid
+{%endcomment%}{%if form.posted_successfully?%}{%assign resetPassword=_9%}{%endif%}<label for="RecoverEmail" class="hidden-label">{{'customer.recover_password.email'|t}}</label>
+    <input type="email" value="" name="email" id="RecoverEmail" class="input-full" placeholder="{{'customer.recover_password.email'|t}}" autocorrect="off" autocapitalize="off">
+    <input type="submit" class="btn" value="{{'customer.recover_password.submit'|t}}">
+    <a href = "#!" type="button" id="HideRecoverPasswordLink" class="return light-gray">{{'customer.recover_password.cancel'|t}}</a>
+  <input type="hidden" id="login_checkout_url" name="checkout_url" value="" />{%endform%}</div>
+</div>{%comment%}
+If accounts are set as optional, the following will be shown as an option
+during checkout, not on the default /login page.
+{%endcomment%}{%if _d.checkout.guest_login%}<hr>
+<h2>{{'customer.login.guest_title'|t}}</h2>{%form 'guest_login'%}<input type="submit" class="btn" value="{{'customer.login.guest_continue'|t}}">
+<input type="hidden" id="login_checkout_url" name="checkout_url" value="" />{%endform%}{%endif%}</div>
+</div>
+      <script type="text/javascript">
+        document.body.className = "template-customers-login no-outlines";
+        document.body.id = "account";
+        window.document.title = "Account – Holden Outerwear";
+
+        var checkoutUrl = window.location.protocol + '//' + window.location.host + ('{{locksmith_path}}' || window.location.pathname) + window.location.search;
+
+        checkoutUrl = checkoutUrl.replace('/account/login', '/');
+
+        if (document.getElementsByName) {
+          var nodes = document.getElementsByName('checkout_url');
+          for (var i = 0; i < nodes.length; i++) {
+            nodes[i].value = checkoutUrl;
+          }
+        } else {
+          document.getElementById('login_checkout_url').value = checkoutUrl;
+        }
+      </script>{%endif%}{%endcapture%}{%assign customer_login_form=locksmith_customer_login_form%}{%assign customer_register_form=locksmith_customer_register_form%}{%unless locksmith_guest_content%}{%capture locksmith_guest_content%}<p><strong>This content is protected</strong> - please log in with your customer account to continue.</p>
+{{customer_login_form}}{%endcapture%}{%endunless%}{%unless locksmith_access_denied_content%}{%capture locksmith_access_denied_content%}{%if _p%}<p><strong>This content is protected, but it doesn't look like you have access.</strong> If you feel this is a mistake, please contact the store owner.</p>{%if locksmith_manual_lock%}<p><a href="#" onclick="window.parent.__locksmith_hide_frame(); return false;">&lsaquo; Back</a></p>{%endif%}{%else%}{{locksmith_guest_content}}{%endif%}{%endcapture%}{%endunless%}

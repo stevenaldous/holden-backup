@@ -1,0 +1,112 @@
+<!-- /templates/product.liquid -->
+{% comment %}
+Rich snippets
+{% endcomment %}
+<div itemscope itemtype="http://schema.org/Product">
+<meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+<meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
+{% comment %}
+Establish thumbnail grid
+{% endcomment %}
+{% assign thumbnailLength = product.images | size %}
+{% comment %}
+Hide if there are no variant images
+{% endcomment %}
+{% assign thumbnailColumns = 'grid__item large--hide medium-down--hide' %}
+{% if thumbnailLength == 1 %}
+  {% assign thumbnailColumns = 'grid__item large--hide medium-down--hide' %}
+{% elsif thumbnailLength == 2 %}
+  {% assign thumbnailColumns = 'grid__item one-half' %}
+{% elsif thumbnailLength == 3 %}
+  {% assign thumbnailColumns = 'grid__item one-third' %}
+{% elsif thumbnailLength > 3 %}
+  {% assign thumbnailColumns = 'grid__item one-quarter' %}
+{% endif %}
+
+{% comment %}
+Get first variant, or deep linked one
+{% endcomment %}
+{% assign main_product = product %} 
+{% include 'wh_calculate_discount' with product %} 
+
+{% include 'wh_visible_helper' with product %}
+{% if wh_visible == false %}
+<p>Product Not Available</p>
+{% else %}
+{% assign current_variant = product.selected_or_first_available_variant %}
+<div class="grid--full product-single wrapper">
+<div class = "grid__item push--large--one-eighth large--three-quarters one-whole">
+<!-- Product Photos -->
+<div class = "grid">
+<div class="grid__item product-images large--one-half text-center">
+  <div class="product-single__photos" id="ProductPhoto">
+    <div class = "product-page-table">
+      <div class = "cell">
+        {% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+        <div class="popup-gallery" >
+          <div class = "product-page-frame frame">
+            <img src="{{ featured_image | img_url: 'large' }}" data-mfp-src = "{{ featured_image.src | img_url: '2048x2048' }}" alt="{{ featured_image.alt | escape }}" class = "mfp-zoom-in-cur productvarimg lazyload" id="{{featured_image.id}}">
+            {% assign featured_image_id = featured_image.id %}
+            {% for image in product.images %}
+              {% if image.id != featured_image_id %}
+                <img src="{{ image.src | img_url: 'large' }}" alt="{{ image.alt | escape }}" data-mfp-src ="{{ image.src | img_url: '2048x2048' }}" id="{{image.id}}" class = "hide mfp-zoom-in-cur">
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Product Thumbnails -->
+  {% if product.images.size > 1 %}
+    <div class="product-single__thumbnails grid--full gallery" id="ProductThumbs">
+      <div class = "grid__item">
+        <div class = "grid-uniform">
+          <div class="{{ thumbnailColumns }} thumbnail-wrapper active-thumbnail">
+            <a href="{{ featured_image.src | img_url: 'large' }}" class="product-single__thumbnail">
+              <img data-id="{{featured_image.id}}" src="{{ featured_image.src | img_url: 'compact' }}" data-action="show-product-image" alt="{{ featured_image.alt | escape }}" class = "alt-image">
+            </a>
+          </div>
+          {% for image in product.images %}
+            {% if image.id != featured_image.id %}
+              <div class="{{ thumbnailColumns }} thumbnail-wrapper">
+                <a href="{{ image.src | img_url: 'large' }}" class="product-single__thumbnail">
+                  <img data-id="{{image.id}}" src="{{ image.src | img_url: 'compact' }}" data-action="show-product-image" alt="{{ image.alt | escape }}" class = "alt-image">
+                </a>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Product Description -->
+  <br>
+  <br>
+<div class="grid__item large--one-half text-center product-description-wrapper">
+  <h1 class="product-title" itemprop="name">{{ product.title }}</h1>
+  <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+    <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+    <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+   
+
+  </div>
+
+              <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+
+</div>
+</div>
+</div>
+</div>
+<script>
+window.product = {{ product | json }};
+window.product.money_format = "{{ shop.money_format }}";
+window.product.add_label = {% if product.options.size == 1 %}true{% else %}false{% endif %};
+window.product.label = "{{ product.options.first | escape }}";
+window.selectCallback = PaloAlto.onVariantSelected;
+</script>
+  
+{% endif %}

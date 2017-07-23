@@ -1,0 +1,125 @@
+<!-- /snippets/product-form.liquid -->
+
+{% assign variants_count = 0 %}
+
+{% if template == 'product' %}
+
+{% for variant in product.variants %}
+  {% assign variants_count = variants_count | plus: 1 %}
+{% endfor %}
+
+  {% comment %}
+    Check if the product is on sale and set a variable to be used below.
+  {% endcomment %}
+  {% assign on_sale = false %}
+  {% if product.compare_at_price > product.price %}
+    {% assign on_sale = true %}
+  {% endif %}
+
+  {% comment %}
+    Check if the product is sold out and set a variable to be used below.
+  {% endcomment %}
+
+  {% assign sold_out = true %}
+  {% if product.available %}
+    {% assign sold_out = false %}
+  {% endif %}
+
+{% elsif template == 'index' %}
+
+{% for variant in product.variants %}
+  {% assign variants_count = variants_count | plus: 1 %}
+{% endfor %}
+
+{% endif %}
+
+{% comment %}
+  ID addToCartForm is a selector for the ajax cart plugin.
+{% endcomment %}
+
+<form action="/cart/add" data-productid="{{product.id}}"  method="post" enctype="multipart/form-data" id="AddToCartForm" class="product-form">
+
+
+  {% comment %}
+   Show Product Title on index only.
+  {% endcomment %}
+
+  {% if template == 'index' %}
+    <h1 class = "featured-product-title wow fadeInUpBig">
+      <a href="{{ product.url | within: collection }}">{{ product.title | truncate: 50 }}</a>
+    </h1>
+  {% endif %}
+
+  <!-- Price -->
+  <h2 id="ProductPrice" itemprop="price" class = "wow fadeInUpBig">
+        {% if on_sale == true and current_variant.compare_at_price and product.compare_at_price_varies %}
+        {{product.price_min | money }} - {{ product.price_max | money }}
+        <span class = "reduced-price"><s>{{  current_variant.compare_at_price | money }}</s></span>
+      {% elsif on_sale == true and  current_variant.compare_at_price and product.compare_at_price_varies == false%}
+    <span class = "reduced-price"><s>{{  current_variant.compare_at_price | money }}</s></span> {{ product.price | money }}
+      {% elsif current_variant.compare_at_price %}
+        {{product.price_min | money }} - {{ product.price_max | money }}
+      {% else %}
+        {{ product.price | money }}
+      {% endif %}
+  </h2>
+    <div class = "wow fadeInUpBig">
+
+  {% if variants_count > 1 %}
+    <select name="id" data-productid="{{product.id}}" id="productSelect" class="product-single__variants">
+      {% for variant in product.variants %}
+        {% if variant.available %}
+          <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
+        {% else %}
+          <option disabled="disabled">
+            {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+          </option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  {% else %}
+    <input name="id" data-productid="{{product.id}}" type="hidden" value="{{ current_variant.id }}">
+  {% endif %}
+
+    <!-- Quantity Select -->
+    <div class="qtydiv">
+      <label for="Quantity" class="quantity-selector">{{ 'products.product.quantity' | t }}</label>
+      <input type="text" id="Quantity1" name="quantity" value="1" min="1" class="quantity-selector quantity-input">
+    </div>
+
+  </div>
+  <br>
+     {{ 'View Fit Guide' | link_to: 'http://www.holdenouterwear.com/pages/fit-guide-new' }}
+	<br>
+
+    <!-- Buttons -->
+  {% if variants_count == 1 and sold_out == true %}
+    <a class="btn disabled wow fadeInUpBig ">
+      <span>{{ 'products.product.sold_out' | t }}</span>
+    </a>
+  {% else %}
+{% if customer.tags.size > 0 %}
+  <button type="submit" name="add" class="btn wow addToCartButton fadeInUpBig">
+{% else %}
+  <button type="submit" name="add" id="AddToCart" class="btn wow addToCartButton fadeInUpBig">
+{% endif %}
+      <span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
+    </button>
+  {% endif %}
+  <br>
+    <br>
+  <div class="product-description rte wow fadeInUpBig" itemprop="description">
+    {{ product.description }}
+  </div>
+
+{% if product.available %}{% include 'subscription-product' %}{% endif %}
+
+  <br>
+
+  <!-- Social Icons -->
+  <div class = "wow fadeInUpBig featured-product-social-wrapper">
+    {% if settings.social_sharing_products %}
+      {% include 'social-sharing' %}
+    {% endif %}
+  </div>
+</form>

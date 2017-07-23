@@ -1,0 +1,30 @@
+<!-- /snippets/featured-collection.liquid -->
+
+<!-- Featured Collection -->
+{% assign collection = collections[settings.featured_collection] %}
+{% assign productsNumber =  50  %}
+
+{% if collection == blank %}
+  {% assign collection = collections['all'] %}
+{% endif %}
+
+{% assign collection_count = collection.all_products_count %}
+
+<div class = "featured-collection-section" id="featured-collection">
+  <div class="grid--full featured-collection wrapper">
+    {% assign collection_count = collection.all_products_count %}
+
+    {% for product in collection.products limit:productsNumber %}
+        {%- comment %}<locksmith:d2d6>{% endcomment -%}
+          {% include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: product %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif %}
+        {%- comment %}</locksmith:d2d6>{% endcomment -%}
+        {% include 'product-grid-item', collection_count: ‘collection.all_products_count’ %}
+    {% else %}
+    {% unless emptyState %}
+      {{ 'theme-onboarding.css' | global_asset_url | stylesheet_tag }}
+      {% assign emptyState = true %}
+      {% endunless %}
+      {% include 'onboarding-empty-collection' %}
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<!-- /snippets/featured-product.liquid -->
+
+{% assign product = all_products[settings.featured_product] %}
+{% if product == blank %}
+  {% assign product = collections['all'].products.first %}
+{% endif %}
+
+{% if product.available %}
+  {% assign sold_out = false %}
+{% else %}
+  {% assign sold_out = true %}
+{% endif %}
+
+{% if product.compare_at_price_min > product.price_min %}
+  {% if sold_out %}
+    {% assign on_sale = false %}
+  {% else %}
+    {% assign on_sale = true %}
+  {% endif %}  
+{% else %}
+  {% assign on_sale = false %}
+{% endif %}
+
+{% include 'wh_calculate_discount' with product %}
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<div class = "featured-product-section wrapper" id = "featured-product">
+  <div class="featured-product text-center {% if tag==true %} fp-has-tag {% endif %}">
+  {% unless collections['all'].products.first == blank %}
+
+    {% include 'product-images' %}
+    {% include 'product-form' %}
+
+    {% else %}
+      {% unless emptyState %}
+        {{ 'theme-onboarding.css' | global_asset_url | stylesheet_tag }}
+        {% assign emptyState = true %}
+      {% endunless %}
+        {% include 'onboarding-featured-product' %}
+    {% endunless %}
+  </div>
+</div>
+
+{% if collections['all'].products.first != blank %}
+<script>
+window.product = {{ product | json }};
+window.product.money_format = "{{ shop.money_format }}";
+window.product.add_label = {% if product.options.size == 1 %}true{% else %}false{% endif %};
+window.product.label = "{{ product.options.first | escape }}";
+window.selectCallback = PaloAlto.onVariantSelected;
+</script>
+{% endif %}
+

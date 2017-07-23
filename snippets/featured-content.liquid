@@ -1,0 +1,50 @@
+<!-- /snippets/featured-content.liquid -->
+
+<!-- Video Section-->
+<div class = "featured-content-section" id="featured-content">
+   {% if settings.show_featured_content_image %}
+  <div class = "grid--full">
+    <div class = "grid__item large--nine-tenths medium-down--one-whole featured-content-overlay">
+    <div class = "featured-content-padding wow fadeInLeftBig"></div>
+    <div class="grid--full grid--table featured-content-wrapper wow fadeInRightBig">
+      <!-- Left Col -->
+      <div class="grid__item medium-down--one-whole video-image-parent wow fadeInLeftBig">
+        <div class = "video-image-wrapper">
+          <img class = "lazyload video-image" data-src="{{ 'featured-video.jpeg' |   asset_url }}" src="{{ 'featured-video.jpeg' | asset_url }}">
+          {% if settings.featured_video_link != blank %}
+          <a class="play-button wow fadeInLeftBig _1" href="{{ settings.featured_video_link }}">
+            <span class = "filled-circle custom-icon-filled-circle"></span>
+            <span class = "stroke-circle custom-icon-stroke-circle"></span>
+            <span class = "triangle custom-icon-triangle"></span>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Right Col -->
+      <div class="grid__item medium-down--one-whole video-text-col wow fadeInRightBig _1">
+        <div class="video-wrapper">
+          {% unless pages[settings.homepage_content].content == "" %}
+              {{ pages[settings.homepage_content].content }}
+          {% else %}
+            {{ 'homepage.onboarding.featured_content_html' | t }}
+          {% endunless %}          
+            <span class="featured-content-spacer-line"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% elsif settings.show_featured_content_image == false %}
+<div class = "grid--full wrapper featured-content-no-image text-center">
+  <div class = "grid__item large--three-quarters push--large--one-eighth medium-down--one-whole">
+    {% unless pages[settings.homepage_content].content == "" %}
+        {{ pages[settings.homepage_content].content }}
+    {% else %}
+      {{ 'homepage.onboarding.featured_content_html' | t }}
+    {% endunless %}  
+      <span class="featured-content-spacer-line"></span>  
+  </div>
+</div>
+{% endif %}
+</div>

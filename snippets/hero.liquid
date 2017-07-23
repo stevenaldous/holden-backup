@@ -1,0 +1,119 @@
+<!-- /snippets/hero.liquid -->
+ <div class = "hero-section">
+  <div class = "{%if settings.enable_hero_image %}header-wrapper{% endif %}{% if settings.show_hero_video %} video-wrapper-bg{% endif %}">
+    {% if settings.enable_hero_image == true %}
+    <div class = "filter"></div>
+    {% endif %}
+    <div class = "{% if settings.enable_centered_hero == false %}hero-text{% endif %} {% if settings.enable_centered_hero %}centered-content{% endif %} {% if settings.show_hero_video %}hero-video-wrapper-padding{% endif %} hero-content-wrapper">
+
+      {% comment %}
+        Logic for hero CSS3 animations
+        First let's delcare the vars.
+      {% endcomment %}
+
+      {% assign mainHeading = false %}
+      {% if settings.main_heading != blank %}
+        {% assign mainHeading = true %}
+      {% endif %}
+
+      {% assign mainSubheading = false %}
+      {% if settings.main_subheading != blank %}
+        {% assign mainSubheading = true %}
+      {% endif %}
+      
+      {% assign buttons = false  %}
+      {% if settings.button_text != blank or settings.show_video_button %}
+        {% assign buttons = true  %}
+      {% endif %}
+
+      {% comment %}
+       Cases for all 7 combinations.
+      {% endcomment %}
+
+      {% if mainHeading == true and mainSubheading == false and buttons == false %}
+        {% assign mainHeadingSpeed = '' %}
+      {% endif %}
+
+      {% if mainHeading == false and mainSubheading == true and buttons == false %}
+        {% assign mainSubheadingSpeed = '' %}
+      {% endif %}
+
+      {% if mainHeading == false and mainSubheading == false and buttons == true %}
+        {% assign buttonsSpeed = '' %}
+      {% endif %}
+
+      {% if mainHeading == false and mainSubheading == false and buttons == true %}
+        {% assign buttonsSpeed = '' %}
+      {% endif %}
+
+      {% if mainHeading == true and mainSubheading == true and buttons == true %}
+        {% assign mainHeadingSpeed = '_1 target' %}
+        {% assign mainSubheadingSpeed = '_2 target' %}
+        {% assign buttonsSpeed = '_3 target' %}
+      {% endif %}      
+
+      {% if mainHeading == true and mainSubheading == true and buttons == false %}
+        {% assign mainHeadingSpeed = '_1 target' %}
+        {% assign mainSubheadingSpeed = '_2 target' %}
+        {% assign buttonsSpeed = '' %}
+      {% endif %}
+
+      {% if mainHeading == true and mainSubheading == false and buttons == true %}
+        {% assign mainHeadingSpeed = '_1 target' %}
+        {% assign mainSubheadingSpeed = '' %}
+        {% assign buttonsSpeed = '_2 target' %}
+      {% endif %}
+
+
+      {% if mainHeading == false and mainSubheading == true and buttons == true %}
+        {% assign mainHeadingSpeed = '' %}
+        {% assign mainSubheadingSpeed = '_1 target' %}
+        {% assign buttonsSpeed = '_2 target' %}
+      {% endif %}
+
+    <!-- Site Info -->
+    <div class="before-photo">
+      {% if settings.main_heading != blank %}
+        <h1 class="main-heading animated fadeInUpBig {{ mainHeadingSpeed }}">{{ settings.main_heading }}</h1>
+      {% endif %}
+      {% if settings.main_subheading != blank %}
+        <h2 class="main-subheading animated fadeInUpBig {{ mainSubheadingSpeed }}">{{ settings.main_subheading }}</h2>
+      {% endif %}
+    </div>
+
+    <!-- Call to Action -->
+    {% if settings.button_text != blank or settings.show_video_button %}
+      <div class = "buttons-wrapper animated fadeInUpBig {{ buttonsSpeed }}">
+        {% if settings.button_text != blank %}
+          <a class="btn call-to-action" id="primary-cta" href="{{ settings.button_url }}">{{ settings.button_text }}</a>
+        {% endif %}
+        {% if settings.show_video_button %}
+          <a class="video-text-link secondary-call-to-action " href="{{ settings.video_button_url }}">
+            <i class="custom-icon-play-button call-to-action-circle"></i>
+            {{ settings.video_button_text }}
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    </div>
+
+    {% unless settings.enable_hero_image %}
+      <!-- Video Hero -->
+      <div class = "grid--full video" id="video">
+        {% if settings.show_hero_video_fallback_image %}
+          <div class = "hero-video-fallback-image animated fadeInUpBig _3"></div>
+        {% endif %}
+        <div id = "iframe-wrapper"></div>
+      </div>
+
+      {% include 'position-youtube' %}
+      {% else  %}
+      <!-- Hero Photo-->
+      <div class="hero">
+        <div class = "hero-photo _3" data-bg="{{'hero.jpeg' | asset_url}}"></div>
+      </div>
+    {% endunless %}
+
+    </div>
+</div>

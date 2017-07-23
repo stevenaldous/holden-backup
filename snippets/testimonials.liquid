@@ -1,0 +1,192 @@
+<!-- /snippets/testimonials.liquid -->
+
+
+{% comment %}
+
+  Assign variables for the Testimonial Section 
+
+{% endcomment %}
+
+
+  {% assign testimonial_one_enabled = false %}
+  {% if settings.testimonial_one_text != blank or settings.testimonial_one_image == true or settings.testimonial_one_customer != blank %}
+    {% assign testimonial_one_enabled = true %}
+  {% endif %}
+  
+  {% assign testimonial_two_enabled = false %}
+  {% if settings.testimonial_two_text != blank or settings.testimonial_two_image == true or settings.testimonial_two_customer != blank %}
+    {% assign testimonial_two_enabled = true %}
+  {% endif %}
+
+  {% assign testimonials_enabled = false %}
+  {% if testimonial_one_enabled and testimonial_two_enabled %}
+    {% assign testimonials_enabled = true %}
+  {% endif %}
+
+  {% assign middle_col_enabled = false %}
+  {% if settings.instagram_access_token != blank or settings.enable_testimonial_image %}
+    {% assign middle_col_enabled = true %}
+  {% endif %}
+
+  {% assign testimonials_disabled = false %}
+  {% if testimonial_one_enabled == false and testimonial_two_enabled == false%}
+    {% assign testimonials_disabled = true %}
+  {% endif %}
+
+
+  {% assign full_testimonial_image = false %}
+  {% if testimonials_disabled == true and settings.enable_testimonial_image and settings.instagram_access_token == blank %}
+    {% assign full_testimonial_image = true %}
+  {% endif %}
+
+  {% assign testimonials_wrapper = 'testimonials-wrapper' %}
+{% comment %}
+
+  Establishes the layout for the Testimonials Section
+
+  {% endcomment %}
+
+  {% if testimonials_enabled and middle_col_enabled %}
+    {% assign testimonial_column_one_width = 'grid__item large--one-third medium--one-whole small--one-whole testimonial-column' %}
+    {% assign instagram_column_width = 'grid__item large--one-third medium--one-whole small--one-whole testimonial-column' %}
+    {% assign testimonial_column_two_width = 'grid__item large--one-third medium--one-whole small--one-whole testimonial-column' %}
+  {% endif %}
+
+  {% if testimonials_enabled and middle_col_enabled == false %}
+    {% assign testimonial_column_one_width = 'grid__item push--large--one-quarter large--one-half medium-down--one-whole wow fadeInUpBig just-two-testimonials' %}
+    {% assign instagram_column_width = 'grid__item large--hide medium-down--hide' %}
+    {% assign testimonial_column_two_width = 'grid__item push--large--one-quarter large--one-half medium-down--one-whole wow fadeInUpBig' %}
+    {% assign testimonial_wrapper_width = 'just-testimonials' %}
+    {% assign testimonials_wrapper = '' %}
+  {% endif %}
+
+  {% if testimonials_enabled == false and middle_col_enabled %}
+    {% assign testimonial_column_one_width = 'grid__item large--hide medium-down--hide' %}
+    {% assign instagram_column_width = 'grid__item' %}
+    {% assign testimonial_column_two_width = 'grid__item large--hide medium-down--hide' %}
+    {% assign testimonials_wrapper = '' %}
+  {% endif %}
+
+  {% if testimonial_one_enabled and middle_col_enabled and testimonial_two_enabled == false %}
+    {% assign testimonial_column_one_width = 'grid__item large--one-half medium--one-whole small--one-whole testimonial-column' %}
+    {% assign instagram_column_width = 'grid__item large--one-half medium--one-whole small--one-whole testimonial-column' %}
+    {% assign testimonial_column_two_width = 'grid__item large--hide medium-down--hide testimonial-column' %}
+  {% endif %}
+
+  {% if testimonial_one_enabled == false and middle_col_enabled and testimonial_two_enabled %}
+    {% assign testimonial_column_one_width = 'grid__item large--hide medium-down--hide testimonial-column' %}
+    {% assign instagram_column_width = 'grid__item large--one-half medium--one-whole small--one-whole testimonial-column' %}
+    {% assign testimonial_column_two_width = 'grid__item large--one-half medium--one-whole small--one-whole testimonial-column' %}
+  {% endif %}
+
+  {% if testimonial_one_enabled == false and middle_col_enabled == false and testimonial_two_enabled %}
+    {% assign testimonial_column_one_width = 'grid__item large--hide medium-down--hide testimonial-column' %}
+    {% assign instagram_column_width = 'grid__item large--hide medium-down--hide testimonial-column' %}
+    {% assign testimonial_column_two_width = 'grid__item large--one-third push--large--one-third medium-down--one-whole testimonial-column just-one-testimonial' %}
+  {% endif %}  
+
+  {% if testimonial_one_enabled and middle_col_enabled == false and testimonial_two_enabled == false %}
+    {% assign testimonial_column_one_width = 'grid__item large--one-third push--large--one-third medium-down--one-whole testimonial-column just-one-testimonial' %}
+    {% assign instagram_column_width = 'grid__item large--hide medium-down--hide testimonial-column' %}
+    {% assign testimonial_column_two_width = 'grid__item large--hide medium-down--hide testimonial-column just-one-testimonial' %}
+  {% endif %}  
+
+  {% if full_testimonial_image == true %}
+    {% assign instagram_column_width = 'grid__item large-down--hide' %}
+  {% endif %}
+
+<div class = "testimonials-section" id="testimonials">
+    {% if settings.testimonials_section_heading != blank %}
+      <div class = "wow fadeInUpBig">
+        <span class="vertical-spacer"></span>
+        <h1 class="text-center testimonials-header">{{ settings.testimonials_section_heading }}</h1>
+        <span class="vertical-spacer"></span>
+      </div>
+    {% endif %}
+    {% unless full_testimonial_image == true %}
+    <div class="grid-uniform {{testimonials_wrapper}}">
+    {% else %}
+      <div class="grid--full {{testimonials_wrapper}}">
+      {% endunless %}
+      <!-- Testimonial 1 -->
+      <div class="{{testimonial_column_one_width}} wow fadeInUpBig">
+        {% if testimonials_disabled == false %}
+          <table class = "testimonials-table">
+            <div class = "grid--full">
+              <div class = "single-testimonial right-testimonial-wrapper {{testimonial_wrapper_width}}">
+                {% if settings.testimonial_one_text != blank %}
+                  <div class="testimonial-text text-center">{{ settings.testimonial_one_text }}</div>
+                {% endif %}
+                <div class="user-profile">
+                  <tr>
+                    <td class = "testimonial-cell">
+                      <div class="user-image">
+                        {% if settings.testimonial_one_image %}
+                          <img src="{{ 'customer-image-left.png' | asset_url }}">
+                        {% endif %}
+                      </div>
+                      <div class = "user-name">
+                        {{ settings.testimonial_one_customer }}
+                      </div>
+                    </td>
+                  </tr>
+                </div>
+              </div>
+            </div>
+          </table>
+        {% endif %}
+      </div>
+      <!-- Instagram Photos -->
+      {% unless full_testimonial_image == true %}
+      <div class="{{instagram_column_width}} wow fadeInUpBig">
+        <div class = "insta-wrapper">
+          <div id="instafeed"></div>
+          {% if settings.instagram_access_token != blank or settings.instagram_access_token != blank and settings.enable_testimonial_image %}
+            <script>window.access_token = "{{ settings.instagram_access_token }}";</script>
+            {{ 'instafeed.min.js' | asset_url | script_tag }}
+            {{ 'insta-template.js' | asset_url | script_tag }}
+            <i class="icon icon-instagram"></i>
+            <a href="{{ settings.instagram_username | prepend: 'http://www.instagram.com/' }}">@{{ settings.instagram_username }}</a>
+          {% endif %}
+          {% if settings.instagram_access_token == blank and settings.enable_testimonial_image %}
+            <img class = "testimonial-image" src = "{{ 'testimonial-image.jpg' | asset_url}}">
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class = "grid__item large--four-fifths push--large--one-tenth just-testimonials">
+        <div class = "testimonial-image-wrapper text-center">
+          <img class = "testimonial-image" src = "{{ 'testimonial-image.jpg' | asset_url}}">
+        </div>
+      </div>
+    {% endunless %}
+    <!-- Testimonial 2 -->
+    <div class="{{testimonial_column_two_width}} wow fadeInUpBig">
+      {% if testimonials_disabled == false %}
+        <table class = "testimonials-table">
+          <div class = "grid--full">
+            <div class = "single-testimonial left-testimonial-wrapper {{testimonial_wrapper_width}}">
+              {% if settings.testimonial_two_text != blank %}
+                <div class="testimonial-text text-center">{{ settings.testimonial_two_text }}</div>
+              {% endif %}
+              <div class="user-profile">
+                <tr>
+                  <td class = "testimonial-cell">
+                    <div class="user-image">
+                      {% if settings.testimonial_two_image %}
+                        <img src="{{ 'customer-image-right.png' | asset_url }}">
+                      {% endif %}
+                    </div>
+                    <div class = "user-name">
+                      {{ settings.testimonial_two_customer }}
+                    </div>
+                  </td>
+                </tr>
+              </div>
+            </div>
+          </div>
+        </table>
+      {% endif %}
+    </div>
+    </div>
+</div>

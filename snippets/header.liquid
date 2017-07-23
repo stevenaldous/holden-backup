@@ -1,0 +1,14 @@
+<!-- /snippets/header.liquid -->
+<header class="site-header is-moved-by-drawer" role="banner">
+	{% if settings.top_bar_text != blank %}
+		{% include 'top-bar' %}
+	{% endif %}
+	<div class="wrapper {% if settings.top_bar_text != blank %}site-header-wrapper{% endif %}">
+		<div class="grid--full grid--table">
+		{% include 'site-logo' %}
+		{% include 'site-nav' %}
+		</div>
+	</div>
+</header>
+
+<div class = "header-offset"></div>

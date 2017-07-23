@@ -1,0 +1,47 @@
+{% comment %}
+  Variable declarations for grid size logic
+{% endcomment %}
+
+{% if template == 'index' %}
+  {% assign productsNumber =  settings.num_products  %}
+  {% assign productsNumber = productsNumber | plus: 0 %}
+  {% if productsNumber > collection_count %}
+    {% assign productsNumber = collection_count %}
+  {% endif %}
+  {% assign divisibleByThree = productsNumber | modulo: 3 %}
+  {% assign divisibleByFour = productsNumber | modulo: 4 %}
+  {% assign divisibleByFive = productsNumber | modulo: 5 %}
+{% elsif template == 'list-collections' %}
+  {% assign collection_count = shop.collections_count %}
+  {% for collection in collections %}
+    {%- comment %}<locksmith:87ef>{% endcomment -%}
+      {% include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: collection %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif %}
+    {%- comment %}</locksmith:87ef>{% endcomment -%}
+    {% if collection.handle == 'frontpage' %}
+        {% assign collection_count = collection_count | minus: 1  %}
+    {% endif %}
+  {% endfor %}
+{% elsif template == 'collection' %}
+  {% assign collection_count = collection.all_products_count %}
+  {% assign divisibleByThree = collection_count | modulo: 3 %}
+  {% assign divisibleByFour = collection_count | modulo: 4 %}
+  {% assign divisibleByFive = collection_count | modulo: 5 %}
+{% endif %}
+
+{% comment %}
+  Logic to set the grid size
+{% endcomment %}
+
+{% if collection_count == 1 or productsNumber == 1 %}
+  {% assign grid_item_width = 'push--large--one-third large--one-third medium--one-half small--one-whole text-center' %}
+{% elsif collection_count == 2 or productsNumber == 2 %}
+  {% assign grid_item_width = 'push--large--one-quarter large--one-quarter medium--one-half small--one-whole text-center' %}
+{% elsif collection_count == 3 or divisibleByThree == 0 %}
+  {% assign grid_item_width = 'large--one-third medium--one-half small--one-whole text-center' %}
+{% elsif collection_count == 4 or divisibleByFour == 0 %}
+  {% assign grid_item_width = 'large--one-quarter medium--one-half small--one-whole text-center' %}
+{% elsif collection_count == 5 or divisibleByFive == 0 %}
+  {% assign grid_item_width = 'large--one-third medium--one-half small--one-whole text-center' %}
+{% else %}
+  {% assign grid_item_width = 'large--one-third medium--one-half small--one-whole text-center' %}
+{% endif %}

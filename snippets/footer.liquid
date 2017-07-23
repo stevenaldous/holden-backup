@@ -1,0 +1,256 @@
+<!-- snippets/footer.liquid -->
+
+{% comment %}
+
+Assign variables to the theme settings.
+
+{% endcomment %}
+
+{% assign show_footer_logo = false %}
+{% if settings.footer_logo == "use_header_logo" or settings.footer_logo == "upload_another_logo" %}
+  {% assign show_footer_logo = true %}
+{% endif %}
+
+{% assign footer_links_enable = false %}
+{% if linklists.footer.links.size > 0 %}
+  {% assign footer_links_enable = true %}
+{% endif %}
+
+{% assign col_two_enabled = false %}
+{% if settings.blog_widget_select != blank %}
+  {% if blogs[settings.blog_widget_select].articles_count > 0 %}
+  {% assign col_two_enabled = true %}
+{% endif %}
+{% endif %}
+
+{% comment %}
+
+Determine whether to show col 3.
+
+{% endcomment %}
+
+{% assign col_three_enabled = false %}
+
+{% if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social.googleplus_link != blank %}
+  {% assign social_enable = true %}
+{% endif %}
+
+{% if settings.footer_text != blank %}
+  {% assign footer_text = true %}
+{% endif %}
+
+{% if settings.show_payment_icons %}
+{% assign payment_icons = true %}
+{% endif %}
+
+{% if social_enable == true or footer_text == true or payment_icons == true %}
+ {% assign col_three_enabled = true %}
+{% endif %}
+
+
+{% comment %}
+
+Establish the grid for all three columns.
+
+{% endcomment %}
+
+{% assign col_one = "grid__item large--one-third medium-down--one-whole footer-col" %}
+{% assign col_two = "grid__item large--one-third medium-down--one-whole footer-col" %}
+{% assign col_three = "grid__item large--one-third medium-down--one-whole footer-col" %}
+
+
+{% assign hidden_col = "grid__item hide" %}
+{% assign visible_subcol_one = "grid__item large--one-third medium-down--one-whole footer-col" %}
+{% assign visible_subcol_two = "grid__item large--two-thirds medium-down--one-whole footer-col" %}
+{% assign visible_subcol_full = "grid__item one-whole footer-col" %}
+
+{% assign one_col_footer = "grid__item push--large--one-third large--one-third medium-down--one-whole" %}
+{% assign two_col_footer = "grid__item large--one-half medium-down--one-whole footer-col" %}
+{% assign col_one_enabled = true %}
+
+
+{% comment %}
+
+Establish the layout for the first column.
+
+{% endcomment %}
+
+
+{% if show_footer_logo == true and footer_links_enable == true %}
+  {% assign col_one_subcol_one = visible_subcol_one %}
+  {% assign col_one_subcol_two = visible_subcol_two %}
+{% elsif show_footer_logo == false and footer_links_enable == true %}
+  {% assign col_one_subcol_one = hidden_col %}
+  {% assign col_one_subcol_two = visible_subcol_full %}
+{% elsif show_footer_logo == true and footer_links_enable == false %}
+  {% assign col_one_subcol_one = visible_subcol_full %}
+  {% assign col_one_subcol_two = hidden_col %}
+{% elsif show_footer_logo == false and footer_links_enable == false %}
+  {% assign col_one = "grid__item large--hide medium-down--hide" %}
+  {% assign col_two = "grid__item large--one-half medium-down--one-whole footer-col" %}
+  {% assign col_three = "grid__item large--one-half medium-down--one-whole footer-col" %}
+  {% assign col_one_enabled = false %}
+{% endif %}
+
+
+{% comment %}
+
+2 columns
+
+{% endcomment %}
+
+
+{% if col_one_enabled == true and col_two_enabled == true and col_three_enabled == false %}
+
+  {% assign col_one = two_col_footer %}
+  {% assign col_two = two_col_footer %}
+  {% assign col_three = hidden_col %}
+
+{% elsif col_one_enabled == true and col_two_enabled == false and col_three_enabled == true %}
+
+  {% assign col_one = two_col_footer %}
+  {% assign col_two = hidden_col %}
+  {% assign col_three = two_col_footer %}
+  
+  {% assign col_one_subcol_one = 'grid__item large--one-half medium-down--one-whole' %}
+  {% assign col_one_subcol_two = 'grid__item large--one-half medium-down--one-whole no-blog-footer' %}
+
+{% elsif col_one_enabled == false and col_two_enabled == true and col_three_enabled == true %}
+
+  {% assign col_one = hidden_col %}
+  {% assign col_two = two_col_footer %}
+  {% assign col_three = two_col_footer %}
+
+{% endif %}
+
+{% comment %}
+
+1 column
+
+{% endcomment %}
+
+{% if col_one_enabled == true and col_two_enabled == false and col_three_enabled == false %}
+
+  {% assign col_one = one_col_footer %}
+  {% assign col_two = hidden_col %}
+  {% assign col_three = hidden_col %}
+
+{% elsif col_one_enabled == false and col_two_enabled == true and col_three_enabled == false %}
+
+  {% assign col_one = hidden_col %}
+  {% assign col_two = one_col_footer %}
+  {% assign col_three = hidden_col %}
+
+{% elsif col_one_enabled == false and col_two_enabled == false and col_three_enabled == true %}
+
+  {% assign col_one = hidden_col %}
+  {% assign col_two = hidden_col %}
+  {% assign col_three = one_col_footer %}
+
+{% endif %}
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo" id="Footer">
+
+    <div class="grid--full wrapper wow fadeInUpBig">
+      <div class = "grid__item push--large--one-eighth large--three-quarters medium-down--one-whole">
+
+        <div class = "grid">
+
+          <!-- Col 1 -->
+          <div class = "{{col_one}} footer-links-wrapper footer-links">
+            <div class = "grid">
+              <div class = "{{ col_one_subcol_one }} footer-col-logo">
+                <a href="/" itemprop="url" class="footer-logo">
+                  {% if settings.footer_logo == "upload_another_logo" %}
+                  <img src="{{ 'footer-logo.png' | asset_url }}" alt="{{ shop.name }}" itemprop="logo">
+                  {% elsif settings.footer_logo == "use_header_logo" %}
+                  <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" itemprop="logo">
+                  {% endif %}
+                </a>
+                </div>
+                <div class = "{{ col_one_subcol_two }}">
+                  <div class = "grid">
+                  {% for link in linklists.footer.links %}
+                  {%- comment %}<locksmith:58b5>{% endcomment -%}
+                    {% include 'locksmith-variables', locksmith_scope: 'subject', locksmith_subject: link %}{% if locksmith_transparent %}{% else %}{% continue %}{% endif %}
+                  {%- comment %}</locksmith:58b5>{% endcomment -%}
+                  <div class="grid__item large--one-whole medium-down--one-third footer-link-wrapper">
+                    <a class="footer-link" href="{{ link.url }}">{{ link.title }}</a>
+                  </div>
+                  {% endfor %}
+                </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Col 2 -->
+            <div class="{{col_two}}">
+              {% for article in blogs[settings.blog_widget_select].articles limit:2 %}
+              <a class="article-title" href="{{ article.url }}" title="{{ article.title | escape }}">{{ article.title }}</a>
+              <p class="article-excerpt">
+                <a href="{{article.url}}">{{ article.content | strip_html | truncate: 80 }}</a>
+              </p>
+              {% endfor %}
+            </div>
+
+            <!-- Col 3 -->
+            <div class = "{{col_three}}">
+              <div class = "grid">
+                <div class = "grid__item one-whole footer-col footer-image-col">
+                  <p>{{settings.footer_text}}</p>
+                </div>
+                  <div class="grid__item one-whole social-sharing-wrapper">
+                  {% if settings.social_facebook_link != blank %}
+                  <a class = "facebook" href = "{{ settings.social_facebook_link }}">
+                    <i class = "custom-icon-facebook-2"></i >
+                    </a>
+                    {% endif %}
+
+                    {% if settings.social_twitter_link != blank %}
+                    <a class = "twitter" href = "{{ settings.social_twitter_link }}">
+                      <i class = "custom-icon-twitter-2"></i>
+                    </a>
+                    {% endif %}
+
+                    {% if settings.social_pinterest_link != blank %}
+                    <a class = "pinterest" href = "{{ settings.social_pinterest_link }}">
+                      <i class = "custom-icon-pinterest-2"></i>
+                    </a>
+                    {% endif %}
+
+                    {% if settings.social_google_plus_link != blank %}
+                    <a class = "google-plus" href = "{{ settings.social_google_plus_link }}">
+                      <i class = "custom-icon-google-plus-2"></i>
+                    </a>
+                    {% endif %}
+                    <a href = "https://vimeo.com/holdenouterwear">
+                      <i class = "icon icon-vimeo"></i>
+                     </a>
+                    <a href = "https://www.instagram.com/holden_outerwear/">
+                      <i class = "icon icon-instagram"></i>
+                    </a>
+                </div>
+              </div>
+              <div class = "shopify-link">
+                <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</span><br>
+                {{ powered_by_link }} <a href = "http://www.pagemilldesign.com"> • Design by Page Mill</a>
+              </div> 
+              {% unless shop.enabled_payment_types == empty %}
+              <ul class="payment-icon-list grid-uniform">
+                {% for type in shop.enabled_payment_types %}
+                <li classs = "grid__item large--one-eighth">
+                  <span class="icon-fallback-text">
+                    <span class="icon icon-{{type}}" aria-hidden="true"></span>
+                    <span class="fallback-text">{{ type | replace: '_',' '}}</span>
+                  </span>
+                </li>
+                {% endfor %}
+              </ul>
+              {% endunless %}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </footer>

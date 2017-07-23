@@ -1,0 +1,50 @@
+{% comment %}
+  Blank single product state
+{% endcomment %}
+
+{% unless emptyState %}
+  {{ 'theme-onboarding.css' | global_asset_url | stylesheet_tag }}
+  {% assign emptyState = true %}
+{% endunless %}
+
+<div class="helper-section">
+  <div class="helper-note">
+    <span class="helper-icon"></span>
+    <h3>{{ 'homepage.onboarding.single_product_title' | t }}</h3>
+    {% assign featured = settings.home_featured_products %}
+    <p>{{ 'homepage.onboarding.single_product__text_html' | t: collection: featured }}</p>
+    <p>
+      <a class="admin-btn-primary" href="/admin/products/new">{{ 'homepage.onboarding.single_product_cta' | t }}</a>
+      <a href="/admin/themes/current/settings" class="secondary-action">{{ 'homepage.onboarding.single_product_cta_secondary' | t }}</a>
+    </p>
+  </div>
+  <!-- Fake Image -->
+  <div class="popup-gallery" >
+    <div class = "product-page-frame frame">
+        <a href="#!" class = "fake-product">
+          {% capture imageUrl %}//cdn.shopify.com/s/images/themes/product-1.png{% endcapture %}
+          {{ imageUrl | img_tag }}
+        </a>
+    </div>
+  </div>
+
+  <!-- Fake Product Text -->
+  <h1 class = "featured-product-title wow fadeInUpBig">
+    <a href="{{ product.url | within: collection }}">{{ 'homepage.onboarding.product_title' | t }}</a>
+  </h1>
+
+  <h2 id="ProductPrice" itemprop="price" class = "wow fadeInUpBig"> 
+    $19.99
+  </h2>
+ 
+  <div class="product-description rte wow fadeInUpBig _1" itemprop="description">
+  Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+  </div>
+
+  <button type="submit" name="add" id="AddToCart" class="btn wow fadeInUpBig _2">
+    <span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
+  </button>
+
+</div>
+
+

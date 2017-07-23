@@ -1,0 +1,87 @@
+{%- comment %}<locksmith:b359>{% endcomment -%}
+  {% include 'locksmith' -%}
+{%- comment %}</locksmith:b359>{% endcomment -%}
+
+<!doctype html>
+  <!--[if IE 8]><html class="no-js ie9 lt-ie9" lang="en"> <![endif]-->
+  <!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--><html class="no-js"><!--<![endif]-->
+  <!--[if !IE]><!--><html class="not-ie"><!--<![endif]-->
+  <head>
+<script>window.wh_metafields = {};
+ {% if customer.tags.size > 0 %} window.wh_customer_tags = true; {% endif %}
+ window.wh_discount_value = 1;
+</script>
+
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="eDFNF-lsTnjbhfAyd23FbIB-AWgCVQ-NndN1I7U3bGM" />
+
+    {% if settings.favicon_enable %}
+      <link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/png" />
+    {% endif %}
+
+    <!-- Title and description ================================================== -->
+    <title>
+    {{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+    </title>
+
+    {% if page_description %}
+    {%- comment %}<locksmith:d213>{% endcomment -%}
+      {% include 'locksmith-variables', locksmith_hiding_scope: 'resource' %}{% if locksmith_transparent %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+      {%- comment %}original: <meta name="description" content="{{ page_description | escape }}">{%- endcomment %}
+    {%- comment %}</locksmith:d213>{% endcomment -%}
+    {% endif %}
+
+    <!-- Helpers ================================================== -->
+    {% include 'social-meta-tags' %}
+    <link rel="canonical" href="{{ canonical_url }}">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    {{ content_for_header }}
+
+    <!-- Google Webfonts ================================================== -->
+    {% include 'google-fonts' %}
+
+    <!-- CSS ================================================== -->
+    {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+    {{ 'holden-styles.css' | asset_url | stylesheet_tag }}
+
+    <!-- Header hook for plugins ================================================== -->
+    {% include 'header-javascript' %}
+
+  <style type="text/css">.wh-hidden{display: none;}.wh-cart-total, .wh-discount-info, .wh-extra-note {color: #000000;background-color: #FFFF4D;padding: 0px;}.wh-cart-total {font-weight: bold;display: inline-block;  margin-top: 5px;font-size: 22px;}.additional-notes{text-align:right;background-color: #FFFF4D;}</style>{% include 'sca.freegifts' %}
+</head>
+  <body id="{{ page_title | handle }}" class="{% if customer %} customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} no-outlines" >
+    <!-- Palo Alto v1.1 -->
+    <div class = "block-body"></div>
+    {% include 'nav-drawer' %}
+    {% include 'cart-drawer' %}
+    {% include 'header' %}
+    <div id="PageContainer" class="is-moved-by-drawer">
+      <main class="main-content" role="main">
+        {{ content_for_layout }}
+      </main>
+      {% include 'footer' %}
+    </div>
+    {% if settings.show_popup %}
+      {% include 'popup' %}
+    {% endif %}
+    {% include 'footer-javascript' %}
+
+{% include 'subscription-theme-footer' %}
+
+      {% if customer.tags.size > 0 and template != 'cart' %}
+        <script>
+          $(function(){
+            $(document).on('click', "input[name='checkout'], button[name='checkout'], input[name='goto_pp'], button[name='goto_pp'], input[name='goto_gc'], button[name='goto_gc'], [href$='checkout']", function(e){
+              e.preventDefault();
+              window.location = "/cart";
+            });
+          });
+        </script>
+      {% endif %}
+
+ </body>
+</html>
