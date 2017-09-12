@@ -1,0 +1,338 @@
+{% schema %}
+  {
+    "name": "Product",
+    "class": "product-template-section",
+    "settings": [
+    {
+      "type": "checkbox",
+      "id": "product_breadcrumb",
+      "label": "Show collection link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "display_tags",
+      "label": "Show tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_type",
+      "label": "Show type"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_vendor",
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_collections",
+      "label": "Show collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_sku",
+      "label": "Show SKU"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_social_buttons",
+      "label": "Show social media share icons",
+      "default": true
+    },
+    {
+      "type": "radio",
+      "id": "product_description_position",
+      "label": "Description position",
+      "options": [
+        {
+          "value": "top",
+          "label": "Above 'add to cart'"
+        },
+        {
+          "value": "bottom",
+          "label": "Below 'add to cart'"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "product_images_position",
+      "label": "Images position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "set_product_height",
+      "label": "Set height of product images"
+    },
+    {
+      "type": "text",
+      "id": "product_height",
+      "label": "Product image height (in pixels)",
+      "default": "500"
+    },
+    {
+      "type": "header",
+      "content": "Related products"
+    },
+    {
+      "type": "checkbox",
+      "id": "display_related_products",
+      "label": "Show related products ([?](https:\/\/help.outofthesandbox.com\/hc\/en-us\/articles\/115006909487-Related-Products))",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "products_per_row",
+      "label": "Related products per row",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "related_products_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "above",
+          "label": "Above content"
+        },
+        {
+          "value": "below",
+          "label": "Below content"
+        }
+      ],
+      "default": "below"
+    }
+  ],
+  "max_blocks": 16,
+  "blocks": [
+    {
+      "type": "rich_text_and_image",
+      "name": "Rich text and image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "This is an example headline"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Text",
+          "default": "<p>Vestibulum fringilla pede sit amet augue. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer tincidunt. Vestibulum turpis sem, aliquet eget, lobortis pellentesque, rutrum eu, nisl. Suspendisse potenti.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "align_left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "image_gallery",
+      "name": "Image gallery",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "product_detail_image_1",
+          "label": "Image 1",
+          "info": "760 x 500px wide recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "product_detail_image_2",
+          "label": "Image 2",
+          "info": "760 x 500px wide recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "product_detail_image_3",
+          "label": "Image 3",
+          "info": "760 x 500px wide recommended"
+        }
+      ]
+    },
+    {
+      "type": "image_with_text",
+      "name": "Image with text",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Image on left"
+            },
+            {
+              "value": "right",
+              "label": "Image on right"
+            }
+          ],
+          "default": "right"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Headline"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Vestibulum fringilla pede sit amet augue. Pellentesque habitant morbi tristique senecrutrum eu, nisl.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "frontpage_text_align",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Add spacing in between your sections by using a divider."
+        },
+        {
+          "type": "checkbox",
+          "id": "divider_border",
+          "label": "Show border",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "default": {
+    "settings": {
+    },
+    "blocks": [
+      {
+        "type": "rich_text_and_image",
+        "settings": {
+          "title": "This is an example headline",
+          "content": "<p>Vestibulum fringilla pede sit amet augue. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer tincidunt. Vestibulum turpis sem, aliquet eget, lobortis pellentesque, rutrum eu, nisl. Suspendisse potenti.</p>",
+          "text_alignment": "center",
+          "button_label": "Button"
+        }
+      },
+      {
+        "type": "divider",
+        "settings": {
+        }
+      },
+      {
+        "type": "image_gallery",
+        "settings": {
+        }
+      },
+      {
+        "type": "divider",
+        "settings": {
+        }
+      },
+      {
+        "type": "image_with_text",
+        "settings": {
+          "layout": "right",
+          "title": "Headline",
+          "text": "<p>Vestibulum fringilla pede sit amet augue. Pellentesque habitant morbi tristique senecrutrum eu, nisl.</p>",
+          "button_label": "Button",
+          "frontpage_text_align": "left"
+        }
+      },
+      {
+        "type": "divider",
+        "settings": {
+        }
+      }
+    ]
+  }
+}
+{% endschema %}
