@@ -13,6 +13,8 @@ templates/page.custom-6.liquid:
   development: 2017-08-26T17:48:48-07:00   a4226670bb5a35716e06045e389ef5bd
 templates/page.custom-7.liquid:
   development: 2017-09-11T20:28:05-07:00   a4226670bb5a35716e06045e389ef5bd
+templates/page.custom-8.liquid:
+  development: 2017-09-20T21:46:24-07:00   a4226670bb5a35716e06045e389ef5bd
 templates/product.description-bottom.liquid:
   development: 2017-09-11T21:13:29-07:00   a4226670bb5a35716e06045e389ef5bd
 templates/product.details.liquid:
